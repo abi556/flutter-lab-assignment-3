@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'bloc/album_bloc.dart';
 import 'bloc/album_event.dart';
 import 'repository/album_repository.dart';
 import 'screens/album_list_screen.dart';
 import 'screens/album_detail_screen.dart';
+import 'models/album.dart';
+import 'models/photo.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  Hive.registerAdapter(AlbumAdapter());
+  Hive.registerAdapter(PhotoAdapter());
+  await Hive.openBox<Album>('albums');
+  await Hive.openBox<Photo>('photos');
   runApp(const MyApp());
 }
 
